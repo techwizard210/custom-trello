@@ -1,0 +1,86 @@
+body {
+    background-color: #f2f2f2;
+    background-image: url('Frame_119.png');
+    background-size: cover;
+    font-family: Arial, sans-serif;
+    background-repeat: no-repeat;
+}
+
+h1 {
+    text-align: center;
+    color: #f4ebeb;
+    margin-bottom: 200px;
+}
+
+form {
+    max-width: 500px;
+    margin: 0 auto;
+    background-color: rgba(211, 211, 211, 0.8); /* set the opacity to 0.8 (80%) */
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    color: #333;
+    font-weight: bold;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="date"],
+textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-bottom: 16px;
+    font-size: 16px;
+}
+
+input[type="submit"] {
+    background-color: #4CAF50;
+    color: #fff;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+input[type="submit"]:hover {
+    background-color: #45a049;
+}
+
+input[type="submit"]:focus {
+    outline: none;
+    box-shadow: 0 0 5px #4CAF50;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="date"]:focus,
+textarea:focus {
+    border: 1px solid #4CAF50;
+}
+select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-bottom: 16px;
+    font-size: 16px;
+    appearance: none; /* remove the default appearance */
+
+}
+
+select:focus {
+    border: 1px solid #4CAF50;
+    outline: none;
+    box-shadow: 0 0 5px #4CAF50;
+}
+

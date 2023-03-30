@@ -1,0 +1,205 @@
+-- Create a database
+create database LoE;
+
+-- Use the database
+use LoE;
+
+-- Create table for startups
+create table Startup (
+Startup_ID BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY, -- Startup ID column
+Startup_Name varchar(100) not null, -- Startup name column
+Discription varchar(250) not null, -- Startup description column
+Domain varchar(250) not null, -- Startup domain column
+Potential_Usecase varchar(500) not null, -- Potential usecase column
+SUP_Status varchar(20) not null, -- SUP status column
+Remark varchar(300) null -- Remark column
+);
+
+-- Create table for usecases
+create table Usecase (
+Usecase_ID BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY, -- Usecase ID column
+Solution_Title varchar(300) not null, -- Solution title column
+Department varchar(100) not null, -- Department column
+ROL int null, -- ROL column
+Room varchar(50) not null, -- Room column
+Starting_Date date, -- Starting date column
+Ending_Date date, -- Ending date column
+Duration_in_days int null, -- Duration in days column
+Remaining_in_days int null, -- Remaining in days column
+UC_Status varchar(50) not null, -- UC status column
+Remark varchar(300) null -- Remark column
+);
+
+-- Create table for idea deck
+create table Idea_Deck (
+Idea_SN BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY, -- Idea serial number column
+Idea_Title varchar(100) not null, -- Idea title column
+Login_ID varchar(10) not null, -- Login ID column
+Problem_Description varchar(300) not null, -- Problem description column
+Solution_Description varchar(300) not null, -- Solution description column
+Resources_Requirement varchar(400) null -- Resources requirement column
+);
+
+-- Show all tables in the database
+show tables;
+
+-- Use the database
+use loe;
+
+-- Add a foreign key column to the usecase table
+alter table UseCase add column Idea_SN int;
+
+-- Add a foreign key constraint to the usecase table
+alter table usecase add constraint adding_forkey foreign key (Idea_SN) references idea_Deck(Idea_SN);
+
+-- Select all columns from the usecase table
+select * from usecase;
+
+-- Add a foreign key column to the startup table
+alter table startup add column usecase_ID BIGINT;
+
+-- Add a foreign key constraint to the startup table
+alter table startup add constraint adding_forkey2 foreign key (usecase_ID) references usecase(usecase_ID);
+
+-- Add a foreign key column to the usecase table
+alter table usecase add column startup_ID BIGINT;
+
+-- Add a foreign key constraint to the usecase table
+alter table usecase add constraint adding_forkey3 foreign key (Startup_ID) references Startup(Startup_ID);
+
+-- Calculate duration in days and add column
+select datediff(Ending_Date , Starting_Date) as Duration_in_days from usecase;
+
+-- Modify ROL column
+alter table usecase MODIFY COLUMN ROL Decimal(10,2) not null;
+
+-- Show all tables in the database
+show tables;
+
+-- Select all columns from the idea deck table
+select * from idea_deck;
+-- Select all columns from the usecase table
+select * from usecase;
+-- Select all columns from the startup table
+select * from startup;
+-- Select all columns from the evaluation table
+select * from evaluation ;
+UPDATE usecase SET UC_Status = 'Incubated' WHERE Usecase_ID = 33;
+DELETE FROM evaluation;
+INSERT INTO evaluation (Usecase_ID, Solution_Title, Businees_Opportunity, Market_Potential, Scalability, Technical_Feasibility, ROI)
+VALUES (34, 'hassan', 1, 1, 1, 1, 1);
+
+-- Insert a row into the usecase table
+INSERT INTO usecase (Solution_Title, Department, ROL, Room, Starting_Date, Ending_Date, UC_Status, Remark, Idea_SN)
+VALUES ('New Solution', 'Marketing', 1500.00, 'Conference Room A', '2023-03-16', '2023-03-20', 'In Progress', 'This is a test remark.', 2); 
+
+-- Update Duration_in_days column in UseCase table for all rows
+UPDATE usecase
+SET Duration_in_days = DATEDIFF(Ending_Date, Starting_Date)
+WHERE Starting_Date IS NOT NULL AND Ending_Date IS NOT NULL;
+
+-- Update Duration_in_days column in UseCase table for a specific row
+UPDATE usecase 
+SET Duration_in_days = DATEDIFF(Ending_Date, Starting_Date) 
+WHERE Usecase_ID = 11 AND Starting_Date IS NOT NULL AND Ending_Date IS NOT NULL;
+
+-- Disable safe updates for UseCase table
+SET SQL_SAFE_UPDATES=0;
+
+-- Update Remaining_in_days column in UseCase table for all rows with UC_Status 'In Progress'
+UPDATE usecase SET Remaining_in_days = DATEDIFF(Ending_Date, CURDATE()) WHERE UC_Status='In Progress' AND Starting_Date IS NOT NULL AND Ending_Date IS NOT NULL;
+
+-- Create a trigger to update Duration_in_days and Remaining_in_days columns in UseCase table before inserting a new row
+DELIMITER //
+CREATE TRIGGER usecase_duration_trigger 
+BEFORE INSERT ON usecase 
+FOR EACH ROW 
+BEGIN 
+SET NEW.Duration_in_days = DATEDIFF(NEW.Ending_Date, NEW.Starting_Date); 
+SET NEW.Remaining_in_days = DATEDIFF(NEW.Ending_Date, CURDATE()); 
+END //
+DELIMITER ;
+
+-- Create a new table Evaluation
+CREATE TABLE Evaluation (
+    Usecase_ID          BIGINT       NOT NULL,
+    Solution_Title      VARCHAR(300) NOT NULL,
+    Businees_Opportunity INT          NOT NULL,
+    Market_Potential    INT          NOT NULL,
+    Scalability         INT          NOT NULL,
+    Technical_Feasibility INT        NOT NULL,
+    ROI                 INT          NOT NULL,
+    Score               INT          NOT NULL,
+    CONSTRAINT PK_Evaluation PRIMARY KEY (Usecase_ID),
+    CONSTRAINT FK_Evaluation_Usecase FOREIGN KEY (Usecase_ID) REFERENCES usecase(Usecase_ID)
+);
+
+-- Add a new foreign key constraint to Evaluation table referencing UseCase table on Solution_Title column
+ALTER TABLE Evaluation ADD CONSTRAINT FK_Evaluation_UseCase_Solution_Title FOREIGN KEY (Solution_Title) REFERENCES usecase(Solution_Title);
+
+-- Create a function to calculate total score for Evaluation table
+DROP FUNCTION IF EXISTS calculate_total_score;
+DELIMITER //
+CREATE FUNCTION calculate_total_score(Business_Opportunity INT, Market_Potential INT, Scalability INT, Technical_Feasibility INT, ROI INT)
+RETURNS DECIMAL(20,3)
+DETERMINISTIC
+BEGIN
+    DECLARE total_score DECIMAL(20,3) DEFAULT 0;
+    -- Calculate total score based on formula
+    SET total_score = Business_Opportunity*5 + Market_Potential*3.5 + Scalability*3 + Technical_Feasibility*4 + ROI*4.5;
+
+    -- Return the final total score
+    RETURN total_score;
+END //
+DELIMITER ;
+
+-- Create a trigger to calculate Score
+-- Create a trigger to calculate Score
+DELIMITER //
+CREATE TRIGGER calculate_score_trigger
+BEFORE INSERT ON evaluation
+FOR EACH ROW
+BEGIN
+SET NEW.Score = calculate_total_score(NEW.Businees_Opportunity, NEW.Market_Potential, NEW.Scalability, NEW.Technical_Feasibility, NEW.ROI);
+END //
+DELIMITER ;
+
+-- Insert a new record into evaluation table
+INSERT INTO evaluation (Usecase_ID, Solution_Title, Businees_Opportunity, Market_Potential, Scalability, Technical_Feasibility, ROI)
+VALUES (33, 'New Solution', 5, 5, 5, 5, 2);
+
+-- Delete a record from evaluation table
+DELETE FROM evaluation WHERE Scalability=5;
+
+-- Enable event scheduler
+SET GLOBAL event_scheduler = ON;
+
+-- Drop event if already exists
+DROP EVENT IF EXISTS update_remaining_days;
+
+-- Create an event to update remaining days column in usecase table every day
+DELIMITER //
+CREATE EVENT update_remaining_days
+ON SCHEDULE EVERY 1 DAY
+STARTS CURRENT_DATE
+DO
+BEGIN
+UPDATE usecase SET Remaining_in_days = DATEDIFF(Ending_Date, CURDATE()) WHERE Usecase_ID > 0;
+END //
+DELIMITER ;
+
+-- View all events in the database
+SHOW EVENTS;
+
+-- Update remaining days column in usecase table
+UPDATE usecase SET Remaining_in_days = DATEDIFF(Ending_Date, CURDATE()) WHERE Usecase_ID > 0;
+
+
+
+SELECT Usecase_ID, Solution_Title, Score FROM evaluation ORDER BY Score DESC;
+
+UPDATE usecase SET UC_Status = 'Incubated' WHERE Usecase_ID = 27;
+
+DELETE FROM usecase;
+
+

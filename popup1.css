@@ -1,0 +1,74 @@
+/* Dialog Styles */
+.modal-2 {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  text-align: center;
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%;
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.6); /* Black w/ opacity */
+  padding: 5px;
+}
+.modal-content {
+  background-color: #ddd;
+  margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+  border: 1px solid black;
+  width: 30%;
+  padding: 10px;
+}
+
+.modal-btn {
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+.modal-2 h2 {
+  font-size: 3.5rem;
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+}
+
+.modal-2 h3 {
+  font-size: 2.5rem;
+  font-weight: 400;
+  margin-bottom: 1.5rem;
+}
+
+.modal-2 p {
+  font-size: 1.5rem;
+  font-weight: 400;
+  margin-bottom: 2rem;
+}
+
+.modal-2 a {
+  font-size: 1.5rem;
+  color: #4c7de0;
+  text-decoration: none;
+  transition: color 0.2s ease-in;
+}
+
+.modal-2 a:hover {
+  color: #6c9bf1;
+}
+
+.modal-2 .button {
+  padding: 0.5rem 1rem;
+  font-size: 1.5rem;
+  background-color: #4c7de0;
+  border: none;
+  border-radius: 4px;
+  color: #ffffff;
+  cursor: pointer;
+  margin-bottom: 5px;
+}
+
+.modal-2 .button:hover {
+  background-color: #6c9bf1;
+  color: white;
+}

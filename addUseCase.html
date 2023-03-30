@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Usecase Submission Form</title>
+	<link rel="stylesheet" type="text/css" href="addusecase.css">
+    <script>
+		// Get the query string from the URL
+		const queryString = window.location.search;
+	  
+		// Parse the query string and extract the Idea_SN value
+		const urlParams = new URLSearchParams(queryString);
+		const ideaSN = new URLSearchParams(window.location.search).get('ideaSn');
+
+	  
+		// Use the Idea_SN value as needed
+		console.log(ideaSN);
+	  </script>
+</head>
+<body>
+	<h1>Add Usecase</h1>
+	<form method="post" action="add_usecase.php">
+		<input type="hidden" id="Idea_SN" name="Idea_SN" value="ideaSN">
+		<label for="Solution_Title">Solution Title:</label>
+		<input type="text" id="Solution_Title" name="Solution_Title" required>
+
+		<label for="Department">Department:</label>
+		<input type="text" id="Department" name="Department" required>
+
+		<label for="ROL">ROI $:</label>
+		<input type="number" id="ROL" name="ROL" required>
+
+		<label for="Room">Room:</label>
+		<select id="Room" name="Room" required>
+		<option value="">-- Select Room --</option>
+		<option value="incubator 1">Incubator 1</option>
+		<option value="incubator 2">Incubator 2</option>
+		<option value="incubator 3">Incubator 3</option>
+		<option value="incubator 4">Incubator 4</option>
+		<option value="incubator 5">Incubator 5</option>
+		<option value="incubator 6">Incubator 6</option>
+		<option value="Tech Lab - AR/VR">Tech Lab - AR/VR</option>
+		<option value="Tech Lab - SEG">Tech Lab - SEG</option>
+		<option value="Tech Lab - Wireless">Tech Lab - Wireless</option>
+		<option value="Tech Lab - Blockchain">Tech Lab - Blockchain</option>
+		<option value="Tech Lab - Metaverse">Tech Lab - Metaverse</option>
+		<option value="Workshop 1">Workshop 1</option>
+		<option value="Workshop 2">Workshop 2</option>
+		<option value="Workshop 3">Workshop 3</option>
+		<option value="Motion Studio">Motion Studio</option>
+		<option value="Huddle 1">Huddle 1</option>
+		<option value="Huddle 2">Huddle 2</option>
+		<option value="UX Testing">UX Testing</option>
+		<option value="UX Observation">UX Observation</option>
+		<option value="Open Workstation">Open Workstation</option>
+		</select>
+
+
+		<label for="Starting_Date">Starting Date:</label>
+		<input type="date" id="Starting_Date" name="Starting_Date" required>
+
+		<label for="Ending_Date">Ending Date:</label>
+		<input type="date" id="Ending_Date" name="Ending_Date" required>
+
+		<label for="UC_Status">UC Status:</label>
+		<select id="UC_Status" name="UC_Status" required>
+			<option value="">-- Select UC Status --</option>
+			<option value="Selected">Selected</option>
+			<option value="Incubated">Incubated</option>
+			<option value="Graduated">Graduated</option>
+		</select>
+
+		<label for="Remark">Remark:</label>
+		<textarea id="Remark" name="Remark"></textarea>
+
+		<input type="submit" value="Submit">
+	</form>
+	<script>
+		// Set the value of the Idea_SN input field
+		document.getElementById("Idea_SN").value = ideaSN;
+	</script>
+</body>
+</html>
